@@ -1,6 +1,6 @@
 const checkStringLength = (string, maxLength) => string.length <= maxLength;
 const checkPalindrome = (string) => {
-  string = string.toLowerCase().replaceAll(' ', '');
+  string = string.toLowerCase().replace(/\s+/g, '');
   let isPalindrome = true;
   const halfLength = Math.ceil(string.length / 2);
 
