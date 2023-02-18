@@ -19,12 +19,14 @@ function checkPalindrome(string) {
 function extractNumbers (source) {
   const string = source.toString().replaceAll(' ', '');
   let numbers = '';
+  
   for (let i = 0; i < string.length; i++) {
     const symbol = Number(string[i]);
     if (!isNaN(symbol)) {
       numbers += symbol;
     }
   }
+  
   return Number(numbers) === 0 ? NaN : Number(numbers);
 }
 
