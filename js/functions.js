@@ -6,11 +6,13 @@ function checkPalindrome(string) {
   string = string.toLowerCase().replaceAll(' ', '');
   let isPalindrome = true;
   const halfLength = Math.ceil(string.length / 2);
+  
   for (let i = 0; i < halfLength; i++) {
     if (string[i] !== string[string.length - (i + 1)]) {
       isPalindrome = false;
     }
   }
+  
   return isPalindrome;
 }
 
