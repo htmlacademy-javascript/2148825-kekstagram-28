@@ -2,6 +2,11 @@ const checkStringLength = (string, maxLength) => string.length <= maxLength;
 const checkPalindrome = (string) => {
   string = string.toLowerCase().replace(/\s+/g, '');
   let isPalindrome = true;
+
+  if (string.length <= 1) {
+    return false;
+  }
+
   const halfLength = Math.ceil(string.length / 2);
 
   for (let i = 0; i < halfLength; i++) {
