@@ -49,6 +49,7 @@ const USER_NAMES = [
 
 const NUMBER_OF_PHOTOS = 25;
 const COMMENTS_MAX_NUMBER = 6;
+
 const getRandomNumber = (boundary1, boundary2) => {
   const min = Math.ceil(Math.min(boundary1, boundary2));
   const max = Math.floor(Math.max(boundary1, boundary2));
@@ -57,43 +58,45 @@ const getRandomNumber = (boundary1, boundary2) => {
 };
 
 const getRandomUniqueNumber = (boundary1, boundary2) => {
-  const previousNumbers = [];
+  const previousNumbers = new Set();
 
-  return function () {
-    if (previousNumbers.length >= (Math.abs(boundary1 - boundary2) + 1)) {
+  return () => {
+    if (previousNumbers.size >= (Math.abs(boundary1 - boundary2) + 1)) {
       return 'Все числа в данном диапазоне заняты';
     }
 
     let number = getRandomNumber(boundary1, boundary2);
 
-    while (previousNumbers.includes(number)) {
+    while (previousNumbers.has(number)) {
       number = getRandomNumber(boundary1, boundary2);
     }
 
-    previousNumbers.push(number);
+    previousNumbers.add(number);
 
     return number;
   };
 };
 
-const getRandomUniqueIdComment = getRandomUniqueNumber(1, NUMBER_OF_PHOTOS * COMMENTS_MAX_NUMBER);
-const getRandomUniqueIdPhoto = getRandomUniqueNumber(1, NUMBER_OF_PHOTOS);
-const getRandomUniquePhotoImage = getRandomUniqueNumber(1, NUMBER_OF_PHOTOS);
-const getRandomUniquePhotoDescription = getRandomUniqueNumber(0, PHOTO_DESCRIPTIONS.length - 1);
+const getIdComment = getRandomUniqueNumber(1, NUMBER_OF_PHOTOS * COMMENTS_MAX_NUMBER);
+const getIdPhoto = getRandomUniqueNumber(1, NUMBER_OF_PHOTOS);
+const getPhotoImage = getRandomUniqueNumber(1, NUMBER_OF_PHOTOS);
+const getPhotoDescription = getRandomUniqueNumber(0, PHOTO_DESCRIPTIONS.length - 1);
 
 const createComment = () => ({
-  id: getRandomUniqueIdComment(),
+  id: getIdComment(),
   avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
   message: COMMENT_MASSAGES[getRandomNumber(0, COMMENT_MASSAGES.length - 1)],
   name: USER_NAMES[getRandomNumber(0, USER_NAMES.length - 1)],
 });
 
-const createPhoto = () => (
-  {id: getRandomUniqueIdPhoto(),
-    url: `photos/${getRandomUniquePhotoImage()}.jpg`,
-    description: PHOTO_DESCRIPTIONS[getRandomUniquePhotoDescription()],
-    likes: getRandomNumber(15, 200),
-    comments: Array.from({length: getRandomNumber(1, 6)}, createComment)
-  });
+const createPhoto = () => ({
+  id: getIdPhoto(),
+  url: `photos/${getPhotoImage()}.jpg`,
+  description: PHOTO_DESCRIPTIONS[getPhotoDescription()],
+  likes: getRandomNumber(15, 200),
+  comments: Array.from({length: getRandomNumber(1, 6)}, createComment)
+});
 
-const Photos = Array.from({length: NUMBER_OF_PHOTOS}, createPhoto);
+const generatePhotos = (amount) => Array.from({length: amount}, createPhoto);
+
+const photos = generatePhotos(NUMBER_OF_PHOTOS);
