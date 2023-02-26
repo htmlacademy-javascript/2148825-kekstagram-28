@@ -1,1 +1,1 @@
-import {generateRequiredPhotos} from './generate-data.js';
+import {generatePhotos} from './generate-data.js';
