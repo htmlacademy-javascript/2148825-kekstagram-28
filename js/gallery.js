@@ -11,6 +11,8 @@ renderPhotos(photoData);
 //Обработчики событий на странице
 const modalElement = document.querySelector('.big-picture');
 const body = document.querySelector('body');
+const commentCount = document.querySelector('.social__comment-count');
+const commentLoader = document.querySelector('.comments-loader');
 const closeModalButton = modalElement.querySelector('#picture-cancel');
 const openModalContainer = document.querySelector('.pictures');
 
@@ -25,6 +27,8 @@ const onDocumentKeydownEsc = (evt) => {
 function openModalWindow() {
   modalElement.classList.remove('hidden');
   body.classList.add('modal-open');
+  commentCount.classList.add('hidden');
+  commentLoader.classList.add('hidden');
   document.addEventListener('keydown', onDocumentKeydownEsc);
 }
 
