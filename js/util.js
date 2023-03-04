@@ -25,7 +25,17 @@ const getRandomUniqueNumber = (boundary1, boundary2) => {
   };
 };
 
+const addFive = () => {
+  let counter = 5;
+
+  return () => {
+    counter += 5;
+
+    return counter;
+  };
+};
+
 const isEscapeKey = (evt) => evt.key === 'Escape';
 const isEnterKey = (evt) => evt.key === 'Enter';
 
-export {getRandomNumber, getRandomUniqueNumber, isEscapeKey, isEnterKey};
+export {getRandomNumber, getRandomUniqueNumber, isEscapeKey, isEnterKey, addFive};

@@ -1,11 +1,10 @@
-import {isEnterKey, isEscapeKey} from './util.js';
-import {renderBigPicture} from './render-photo.js';
+import {isEnterKey, isEscapeKey, addFive} from './util.js';
+import {renderBigPicture, reloadComments} from './render-photo.js';
 
 const modalElement = document.querySelector('.big-picture');
-// const commentCount = document.querySelector('.social__comment-count');
-// const commentLoader = document.querySelector('.comments-loader');
 const closeModalButton = modalElement.querySelector('#picture-cancel');
 const openModalContainer = document.querySelector('.pictures');
+const commentLoader = modalElement.querySelector('.comments-loader');
 
 const onDocumentKeydownEsc = (evt) => {
   if (isEscapeKey(evt)) {
@@ -17,8 +16,6 @@ const onDocumentKeydownEsc = (evt) => {
 function openModalWindow() {
   modalElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  // commentCount.classList.add('hidden');
-  // commentLoader.classList.add('hidden');
   document.addEventListener('keydown', onDocumentKeydownEsc);
 }
 
@@ -28,6 +25,15 @@ function closeModalWindow() {
   document.removeEventListener('keydown', onDocumentKeydownEsc);
 }
 
+const commentsCounter = (commentsData) => {
+  const counter = addFive();
+
+  return () => {
+    reloadComments(commentsData, counter());
+  };
+};
+
+
 const onOpenModalButtonClick = (evt, photos) => {
   evt.preventDefault();
   const element = evt.target.closest('.picture');
@@ -36,6 +42,17 @@ const onOpenModalButtonClick = (evt, photos) => {
     openModalWindow();
     const targetPhoto = photos.find((item) => item.id === Number(element.dataset.id));
     renderBigPicture(targetPhoto);
+
+    const onCommentLoaderClick = commentsCounter(targetPhoto.comments);
+    commentLoader.addEventListener('click', onCommentLoaderClick);
+    // Если раскомментировать код ниже, то проблема со счётчиками решится, но будут увеличиваться события на этих кнопкахы
+    // closeModalButton.addEventListener('click', () => {
+    //   commentLoader.removeEventListener('click', onCommentLoaderClick);
+    // });
+    //
+    // document.addEventListener('keydown',() => {
+    //   commentLoader.removeEventListener('click', onCommentLoaderClick);
+    // });
   }
 };
 
@@ -47,8 +64,8 @@ const onOpenModalContainerEnter = (evt, photos) => {
 
 const initGallery = (photos) => {
   closeModalButton.addEventListener('click', () => closeModalWindow());
-  openModalContainer.addEventListener('click', (evt) => onOpenModalButtonClick (evt, photos));
-  openModalContainer.addEventListener('keydown', (evt) => onOpenModalContainerEnter (evt, photos));
+  openModalContainer.addEventListener('click', (evt) => onOpenModalButtonClick(evt, photos));
+  openModalContainer.addEventListener('keydown', (evt) => onOpenModalContainerEnter(evt, photos));
 };
 
 export {initGallery};

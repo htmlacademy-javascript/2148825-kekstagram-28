@@ -50,7 +50,7 @@ const USER_NAMES = [
 ];
 
 const NUMBER_OF_PHOTOS = 25;
-const COMMENTS_MAX_NUMBER = 6;
+const COMMENTS_MAX_NUMBER = 20;
 
 const getIdComment = getRandomUniqueNumber(1, NUMBER_OF_PHOTOS * COMMENTS_MAX_NUMBER);
 const getIdPhoto = getRandomUniqueNumber(1, NUMBER_OF_PHOTOS);
@@ -69,7 +69,7 @@ const createPhoto = () => ({
   url: `photos/${getPhotoImage()}.jpg`,
   description: PHOTO_DESCRIPTIONS[getPhotoDescription()],
   likes: getRandomNumber(15, 200),
-  comments: Array.from({length: getRandomNumber(1, 6)}, createComment)
+  comments: Array.from({length: getRandomNumber(1, COMMENTS_MAX_NUMBER)}, createComment)
 });
 
 const generatePhotos = (amount) => Array.from({length: amount}, createPhoto);
