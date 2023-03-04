@@ -1,7 +1,9 @@
 const picturesContainer = document.querySelector('.pictures');
 const picturesTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const picturesFragment = document.createDocumentFragment();
+
 const renderPhotos = (data) => {
+  const picturesFragment = document.createDocumentFragment();
+
   data.forEach(({url, likes, comments, id}) => {
     const picture = picturesTemplate.cloneNode(true);
     picture.dataset.id = id;
