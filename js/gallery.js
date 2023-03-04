@@ -1,10 +1,9 @@
 import {isEnterKey, isEscapeKey} from './util.js';
 import {renderBigPicture} from './render-photo.js';
 
-//Обработчики событий на странице
 const modalElement = document.querySelector('.big-picture');
-const commentCount = document.querySelector('.social__comment-count');
-const commentLoader = document.querySelector('.comments-loader');
+// const commentCount = document.querySelector('.social__comment-count');
+// const commentLoader = document.querySelector('.comments-loader');
 const closeModalButton = modalElement.querySelector('#picture-cancel');
 const openModalContainer = document.querySelector('.pictures');
 
@@ -18,8 +17,8 @@ const onDocumentKeydownEsc = (evt) => {
 function openModalWindow() {
   modalElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  commentCount.classList.add('hidden');
-  commentLoader.classList.add('hidden');
+  // commentCount.classList.add('hidden');
+  // commentLoader.classList.add('hidden');
   document.addEventListener('keydown', onDocumentKeydownEsc);
 }
 
