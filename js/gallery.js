@@ -1,5 +1,8 @@
-import {isEnterKey, isEscapeKey, addFive} from './util.js';
-import {renderBigPicture, reloadComments} from './render-photo.js';
+import {isEnterKey, isEscapeKey} from './util.js';
+import {renderBigPicture, addComments} from './render-photo.js';
+
+const UNIT_COMMENTS_NUMBER = 5;
+let commentsCounter = UNIT_COMMENTS_NUMBER;
 
 const modalElement = document.querySelector('.big-picture');
 const closeModalButton = modalElement.querySelector('#picture-cancel');
@@ -25,15 +28,6 @@ function closeModalWindow() {
   document.removeEventListener('keydown', onDocumentKeydownEsc);
 }
 
-const commentsCounter = (commentsData) => {
-  const counter = addFive();
-
-  return () => {
-    reloadComments(commentsData, counter());
-  };
-};
-
-
 const onOpenModalButtonClick = (evt, photos) => {
   evt.preventDefault();
   const element = evt.target.closest('.picture');
@@ -42,17 +36,20 @@ const onOpenModalButtonClick = (evt, photos) => {
     openModalWindow();
     const targetPhoto = photos.find((item) => item.id === Number(element.dataset.id));
     renderBigPicture(targetPhoto);
+    commentsCounter = UNIT_COMMENTS_NUMBER;
 
-    const onCommentLoaderClick = commentsCounter(targetPhoto.comments);
+    const onCommentLoaderClick = () => {
+      commentsCounter += UNIT_COMMENTS_NUMBER;
+      addComments(targetPhoto.comments, commentsCounter);
+    };
+
     commentLoader.addEventListener('click', onCommentLoaderClick);
-    // Если раскомментировать код ниже, то проблема со счётчиками решится, но будут увеличиваться события на этих кнопкахы
-    // closeModalButton.addEventListener('click', () => {
-    //   commentLoader.removeEventListener('click', onCommentLoaderClick);
-    // });
-    //
-    // document.addEventListener('keydown',() => {
-    //   commentLoader.removeEventListener('click', onCommentLoaderClick);
-    // });
+    closeModalButton.addEventListener('click', () => {
+      commentLoader.removeEventListener('click', onCommentLoaderClick);
+    }, {once: true});
+    document.addEventListener('keydown',() => {
+      commentLoader.removeEventListener('click', onCommentLoaderClick);
+    }, {once: true});
   }
 };
 

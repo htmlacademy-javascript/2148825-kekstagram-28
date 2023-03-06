@@ -1,3 +1,5 @@
+const UNIT_COMMENTS_NUMBER = 5;
+
 const commentItemTemplate = document.querySelector('.social__comment').cloneNode(true);
 const preview = document.querySelector('.big-picture');
 const previewImg = preview.querySelector('.big-picture__img img');
@@ -24,21 +26,23 @@ const reloadCommentsCount = (number, numberShown = number) => {
   commentCount.innerHTML = `${numberShown} из <span class="comments-count">${number}</span> комментариев`;
 };
 
-const reloadComments = (commentsData, counterValue) => {
-  //Если раскомментировать этот console.log, то будет видно, что с каждым открытием фотки, количество счётчиков растёт
-  // console.log(counterValue);
-  const start = counterValue - 5;
-  const end = counterValue;
-
-  if (commentsData.length > end) {
-    commentsContainer.append(createComments(commentsData, start, end));
-    reloadCommentsCount(commentsData.length, end);
+const reloadComments = (commentsData, startIndex, finish) => {
+  if (commentsData.length > finish) {
+    commentsContainer.append(createComments(commentsData, startIndex, finish));
+    reloadCommentsCount(commentsData.length, finish);
     commentLoader.classList.remove('hidden');
   } else {
-    commentsContainer.append(createComments(commentsData, start, commentsData.length));
+    commentsContainer.append(createComments(commentsData, startIndex, commentsData.length));
     reloadCommentsCount(commentsData.length);
     commentLoader.classList.add('hidden');
   }
+};
+
+const addComments = (commentsData, counterValue) => {
+  const commentsShown = counterValue;
+  const startIndex = counterValue - UNIT_COMMENTS_NUMBER;
+
+  reloadComments(commentsData, startIndex, commentsShown);
 };
 
 const renderBigPicture = (targetPhoto) => {
@@ -47,17 +51,7 @@ const renderBigPicture = (targetPhoto) => {
   previewCaption.textContent = targetPhoto.description;
   commentsContainer.innerHTML = '';
 
-  const numberOfComments = targetPhoto.comments.length;
-
-  if (numberOfComments > 5) {
-    commentsContainer.append(createComments(targetPhoto.comments, 0, 5));
-    reloadCommentsCount(numberOfComments, 5);
-    commentLoader.classList.remove('hidden');
-  } else {
-    commentsContainer.append(createComments(targetPhoto.comments));
-    reloadCommentsCount(numberOfComments);
-    commentLoader.classList.add('hidden');
-  }
+  reloadComments(targetPhoto.comments, 0, UNIT_COMMENTS_NUMBER);
 };
 
-export {renderBigPicture, reloadComments};
+export {renderBigPicture, addComments};
