@@ -66,4 +66,3 @@ const initGallery = (photos) => {
 };
 
 export {initGallery};
-//aaaaaaaa
