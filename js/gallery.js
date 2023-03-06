@@ -2,12 +2,14 @@ import {isEnterKey, isEscapeKey} from './util.js';
 import {renderBigPicture, addComments} from './render-photo.js';
 
 const UNIT_COMMENTS_NUMBER = 5;
-let commentsCounter = UNIT_COMMENTS_NUMBER;
 
 const modalElement = document.querySelector('.big-picture');
 const closeModalButton = modalElement.querySelector('#picture-cancel');
 const openModalContainer = document.querySelector('.pictures');
 const commentLoader = modalElement.querySelector('.comments-loader');
+
+let commentsCounter = UNIT_COMMENTS_NUMBER;
+let onCommentLoaderClick;
 
 const onDocumentKeydownEsc = (evt) => {
   if (isEscapeKey(evt)) {
@@ -26,30 +28,25 @@ function closeModalWindow() {
   modalElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydownEsc);
+  commentLoader.removeEventListener('click', onCommentLoaderClick);
 }
 
 const onOpenModalButtonClick = (evt, photos) => {
-  evt.preventDefault();
   const element = evt.target.closest('.picture');
 
-  if (element.dataset.id) {
+  if (element && element.dataset.id) {
+    evt.preventDefault();
     openModalWindow();
     const targetPhoto = photos.find((item) => item.id === Number(element.dataset.id));
     renderBigPicture(targetPhoto);
     commentsCounter = UNIT_COMMENTS_NUMBER;
 
-    const onCommentLoaderClick = () => {
+    onCommentLoaderClick = () => {
       commentsCounter += UNIT_COMMENTS_NUMBER;
       addComments(targetPhoto.comments, commentsCounter);
     };
 
     commentLoader.addEventListener('click', onCommentLoaderClick);
-    closeModalButton.addEventListener('click', () => {
-      commentLoader.removeEventListener('click', onCommentLoaderClick);
-    }, {once: true});
-    document.addEventListener('keydown',() => {
-      commentLoader.removeEventListener('click', onCommentLoaderClick);
-    }, {once: true});
   }
 };
 
