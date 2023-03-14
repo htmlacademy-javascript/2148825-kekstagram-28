@@ -11,16 +11,25 @@ const pristine = new Pristine(uploadForm, {
 });
 
 const isEveryValid = (string) => {
+  if (!string) {
+    return true;
+  }
   const hashtags = string.trim().split(/\s+/);
   return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
 };
 
 const isNonRepeatable = (string) => {
+  if (!string) {
+    return true;
+  }
   const hashtags = string.trim().toLowerCase().split(/\s+/);
   return !hasDuplicates(hashtags);
 };
 
 const isLengthValid = (string) => {
+  if (!string) {
+    return true;
+  }
   const hashtags = string.trim().split(/\s+/);
   return hashtags.length <= 5;
 };
@@ -33,7 +42,7 @@ const validateForm = () => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (pristine.validate()) {
-      console.log('Form is valid');
+      console.log(new FormData(uploadForm));
     }
   });
 };

@@ -12,4 +12,5 @@ renderPhotos(photoData);
 //Отрисовка большого изображения
 initGallery(photoData);
 
+//Отрисовка формы загрузки изображения
 initForm();
