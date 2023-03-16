@@ -25,9 +25,7 @@ const getRandomUniqueNumber = (boundary1, boundary2) => {
   };
 };
 
-const hasDuplicates = (arr) => new Set(arr).size !== arr.length;
-
 const isEscapeKey = (evt) => evt.key === 'Escape';
 const isEnterKey = (evt) => evt.key === 'Enter';
 
-export {getRandomNumber, getRandomUniqueNumber, isEscapeKey, isEnterKey, hasDuplicates};
+export {getRandomNumber, getRandomUniqueNumber, isEscapeKey, isEnterKey};

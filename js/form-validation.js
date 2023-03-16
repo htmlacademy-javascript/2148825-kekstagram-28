@@ -1,8 +1,9 @@
-import {hasDuplicates} from './util.js';
+const HASHTAG_REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
+const NUMBER_OF_HASHTAGS = 5;
 
 const uploadForm = document.querySelector('.img-upload__form');
 const textHashtags = uploadForm.querySelector('.text__hashtags');
-const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
+let errorKey = '';
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -10,37 +11,41 @@ const pristine = new Pristine(uploadForm, {
   errorTextTag: 'div'
 });
 
-const isEveryValid = (string) => {
-  if (!string) {
-    return true;
-  }
-  const hashtags = string.trim().split(/\s+/);
-  return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
+const noDuplicates = (arr) => new Set(arr).size === arr.length;
+const isAmountValid = (arr) => arr.length <= NUMBER_OF_HASHTAGS;
+const isEveryItemValid = (hashtags) => hashtags.every((hashtag) => HASHTAG_REGEX.test(hashtag));
+
+const validationRules = {
+  doubles: noDuplicates,
+  regex: isEveryItemValid,
+  count: isAmountValid,
 };
 
-const isNonRepeatable = (string) => {
-  if (!string) {
-    return true;
-  }
-  const hashtags = string.trim().toLowerCase().split(/\s+/);
-  return !hasDuplicates(hashtags);
+const errorMessages = {
+  doubles: 'Хэш-теги не должны повторяться',
+  regex: 'Убедитесь, что хэш-теги начинаются с #, содержат только буквы и цифры, имеют длину от 2 до 20 символов и разделяются пробелами',
+  count: 'Нельзя указать больше пяти хэш-тегов',
 };
 
-const isLengthValid = (string) => {
-  if (!string) {
-    return true;
-  }
-  const hashtags = string.trim().split(/\s+/);
-  return hashtags.length <= 5;
+const validateHashtags = (inputValue) => {
+  const hashtags = inputValue.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const isValid = Object.entries(validationRules).every(([key, validationFn]) => {
+    const result = validationFn(hashtags);
+    errorKey = key;
+
+    return result;
+  });
+
+  return isValid;
 };
 
-pristine.addValidator(textHashtags, isEveryValid, 'Убедитесь, что хэш-теги начинаются с #, содержат только буквы и цифры, имеют длину от 2 до 20 символов и разделяются пробелами');
-pristine.addValidator(textHashtags, isNonRepeatable, 'Хэш-теги не должны повторяться');
-pristine.addValidator(textHashtags, isLengthValid, 'Нельзя указать больше пяти хэш-тегов');
+const getErrorMessage = () => errorMessages[errorKey];
 
 const validateForm = () => {
+  pristine.addValidator(textHashtags, validateHashtags, getErrorMessage);
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
+
     if (pristine.validate()) {
       console.log(new FormData(uploadForm));
     }
