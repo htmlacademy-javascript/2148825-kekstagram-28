@@ -8,22 +8,22 @@ const scaleTextValue = document.querySelector('.scale__control--value');
 const picture = document.querySelector('.img-upload__preview');
 
 const onButtonSmallerClick = () => {
-  let scaleValue = parseInt(scaleTextValue.value.slice(0, -1));
+  let scaleValue = parseInt(scaleTextValue.value.slice(0, -1), 10);
 
   if (scaleValue > SCALE_MIN) {
     scaleValue -= SCALE_STEP;
     scaleTextValue.value = `${scaleValue}%`;
-    picture.setAttribute('style', `transform: scale(${scaleValue * 0.01});`);
+    picture.style.transform = `scale(${scaleValue * 0.01})`;
   }
 };
 
 const onButtonBiggerClick = () => {
-  let scaleValue = parseInt(scaleTextValue.value.slice(0, -1));
+  let scaleValue = parseInt(scaleTextValue.value.slice(0, -1), 10);
 
   if (scaleValue < SCALE_MAX) {
     scaleValue += SCALE_STEP;
     scaleTextValue.value = `${scaleValue}%`;
-    picture.setAttribute('style', `transform: scale(${scaleValue * 0.01});`);
+    picture.style.transform = `scale(${scaleValue * 0.01})`;
   }
 };
 

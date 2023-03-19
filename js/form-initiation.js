@@ -1,6 +1,7 @@
 import {isEscapeKey} from './util.js';
 import {validateForm} from './form-validation.js';
 import {activateScaleSlider, resetScaleSlider} from './scale-slider.js';
+import {initFilterSelection, resetFilterSlider} from './filter-selection.js';
 
 const uploadFormWindow = document.querySelector('.img-upload__overlay');
 const uploadFileButton = document.querySelector('#upload-file');
@@ -37,6 +38,7 @@ function closeUploadFormWindow () {
   textDescription.removeEventListener('keydown', onFieldKeydownEsc);
   uploadFileButton.value = '';
   resetScaleSlider();
+  resetFilterSlider();
 }
 
 const initForm = () => {
@@ -44,6 +46,7 @@ const initForm = () => {
   closeUploadFormButton.addEventListener('click', closeUploadFormWindow);
   validateForm();
   activateScaleSlider();
+  initFilterSelection();
 };
 
 export {initForm};
