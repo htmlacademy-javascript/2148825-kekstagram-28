@@ -32,7 +32,6 @@ const activateScaleSlider = () => {
   buttonBigger.addEventListener('click', onButtonBiggerClick);
 };
 
-
 const resetScaleSlider = () => {
   picture.removeAttribute('style');
   buttonSmaller.removeEventListener('click', onButtonSmallerClick);
