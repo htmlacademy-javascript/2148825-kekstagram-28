@@ -5,10 +5,10 @@ const SCALE_MIN = 25;
 const buttonSmaller = document.querySelector('.scale__control--smaller');
 const buttonBigger = document.querySelector('.scale__control--bigger');
 const scaleTextValue = document.querySelector('.scale__control--value');
-const picture = document.querySelector('.img-upload__preview');
+const picture = document.querySelector('.img-upload__preview img');
 
 const onButtonSmallerClick = () => {
-  let scaleValue = parseInt(scaleTextValue.value.slice(0, -1), 10);
+  let scaleValue = parseInt(scaleTextValue.value, 10);
 
   if (scaleValue > SCALE_MIN) {
     scaleValue -= SCALE_STEP;
