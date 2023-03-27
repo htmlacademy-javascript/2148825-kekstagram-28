@@ -1,15 +1,18 @@
 const BASE_URL = 'https://28.javascript.pages.academy/kekstagram';
+
 const route = {
   GET_DATA: '/data',
   SEND_DATA: '/',
 };
+
 const methodType = {
   GET: 'GET',
   POST: 'POST',
 };
+
 const errorText = {
   GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-  SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
+  SEND_DATA: 'Не удалось отправить данные. Попробуйте ещё раз',
 };
 
 const load = (url, message, method = methodType.GET, body = null) => fetch(

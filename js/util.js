@@ -1,35 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
 
-const getRandomNumber = (boundary1, boundary2) => {
-  const min = Math.ceil(Math.min(boundary1, boundary2));
-  const max = Math.floor(Math.max(boundary1, boundary2));
-
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
-const getRandomUniqueNumber = (boundary1, boundary2) => {
-  const previousNumbers = new Set();
-
-  return () => {
-    if (previousNumbers.size >= (Math.abs(boundary1 - boundary2) + 1)) {
-      return 'Все числа в данном диапазоне заняты';
-    }
-
-    let number = getRandomNumber(boundary1, boundary2);
-
-    while (previousNumbers.has(number)) {
-      number = getRandomNumber(boundary1, boundary2);
-    }
-
-    previousNumbers.add(number);
-
-    return number;
-  };
-};
-
-const isEscapeKey = (evt) => evt.key === 'Escape';
-const isEnterKey = (evt) => evt.key === 'Enter';
-
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
@@ -50,4 +20,7 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomNumber, getRandomUniqueNumber, isEscapeKey, isEnterKey, showAlert};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+const isEnterKey = (evt) => evt.key === 'Enter';
+
+export {isEscapeKey, isEnterKey, showAlert};
