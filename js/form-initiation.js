@@ -61,7 +61,7 @@ const onUploadFileButtonChange = () => {
 
 const initForm = () => {
   uploadFileButton.addEventListener('change', onUploadFileButtonChange);
-  closeUploadFormButton.addEventListener('click', closeUploadFormWindow);
+  closeUploadFormButton.addEventListener('click', () => closeUploadFormWindow());
 };
 
 export {initForm};
