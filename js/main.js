@@ -10,9 +10,6 @@ getData()
     initGallery(photoData);
   })
   .catch(
-    (err) => {
-      showAlert(err.message);
-    }
-  );
+    (err) => showAlert(err.message));
 
 initForm();

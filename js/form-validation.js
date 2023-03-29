@@ -75,4 +75,4 @@ const validateForm = (onSuccess, onError) => {
   });
 };
 
-export {validateForm, unblockSubmitButton};
+export {validateForm};
