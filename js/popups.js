@@ -27,19 +27,19 @@ const showPopup = (template, buttonSelector, innerSelector) => {
   const onDocumentKeydownEsc = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      closeNode();
+      closePopup();
     }
   };
 
-  function closeNode() {
+  function closePopup() {
     node.remove();
     document.removeEventListener('keydown', onDocumentKeydownEsc);
   }
 
   document.body.append(node);
   document.addEventListener('keydown', onDocumentKeydownEsc);
-  button.addEventListener('click', () => closeNode());
-  node.addEventListener('click', () => closeNode());
+  button.addEventListener('click', () => closePopup());
+  node.addEventListener('click', () => closePopup());
   inner.addEventListener('click', (evt) => evt.stopPropagation());
 };
 
