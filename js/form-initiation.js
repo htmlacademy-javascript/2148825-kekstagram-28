@@ -2,6 +2,7 @@ import {isEscapeKey} from './util.js';
 import {validateForm} from './form-validation.js';
 import {activateScaleSlider, resetScaleSlider} from './scale-slider.js';
 import {initFilterSelection, resetFilterSlider} from './filter-selection.js';
+import {showSuccess, showError} from './popups.js';
 
 const uploadFormWindow = document.querySelector('.img-upload__overlay');
 const uploadFileButton = document.querySelector('#upload-file');
@@ -12,7 +13,10 @@ const textDescription = uploadFormWindow.querySelector('.text__description');
 const onDocumentKeydownEsc = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeUploadFormWindow();
+
+    if (!document.querySelector('.error')) {
+      closeUploadFormWindow();
+    }
   }
 };
 
@@ -36,17 +40,28 @@ function closeUploadFormWindow () {
   document.removeEventListener('keydown', onDocumentKeydownEsc);
   textHashtags.removeEventListener('keydown', onFieldKeydownEsc);
   textDescription.removeEventListener('keydown', onFieldKeydownEsc);
+  textHashtags.value = '';
+  textDescription.value = '';
   uploadFileButton.value = '';
   resetScaleSlider();
   resetFilterSlider();
 }
 
-const initForm = () => {
-  uploadFileButton.addEventListener('change', openUploadFormWindow);
-  closeUploadFormButton.addEventListener('click', closeUploadFormWindow);
-  validateForm();
+const onSendSuccess = () => {
+  showSuccess();
+  closeUploadFormWindow();
+};
+
+const onUploadFileButtonChange = () => {
+  openUploadFormWindow();
   activateScaleSlider();
   initFilterSelection();
+  validateForm(onSendSuccess, showError);
+};
+
+const initForm = () => {
+  uploadFileButton.addEventListener('change', onUploadFileButtonChange);
+  closeUploadFormButton.addEventListener('click', () => closeUploadFormWindow());
 };
 
 export {initForm};

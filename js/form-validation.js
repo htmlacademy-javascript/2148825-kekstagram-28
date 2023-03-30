@@ -1,9 +1,18 @@
+import {sendData} from './api.js';
+
 const HASHTAG_REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
 const NUMBER_OF_HASHTAGS = 5;
 
 const uploadForm = document.querySelector('.img-upload__form');
 const textHashtags = uploadForm.querySelector('.text__hashtags');
+const submitButton = document.querySelector('#upload-submit');
+
 let errorKey = '';
+
+const submitButtonText = {
+  sent: 'Опубликовать',
+  sending: 'Отправка...',
+};
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -41,13 +50,27 @@ const validateHashtags = (inputValue) => {
 
 const getErrorMessage = () => errorMessages[errorKey];
 
-const validateForm = () => {
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = submitButtonText.sending;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = submitButtonText.sent;
+};
+
+const validateForm = (onSuccess, onError) => {
   pristine.addValidator(textHashtags, validateHashtags, getErrorMessage);
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     if (pristine.validate()) {
-      console.log(new FormData(uploadForm));
+      blockSubmitButton();
+      sendData(new FormData(uploadForm))
+        .then(onSuccess)
+        .catch(onError)
+        .finally(unblockSubmitButton);
     }
   });
 };
