@@ -1,14 +1,13 @@
 import {getRandomUniqueNumber} from './util.js';
 import {renderPhotos} from './pictures.js';
+import {debounce} from './util.js';
 
 const NUMBER_OF_PHOTOS = 25;
 const NUMBER_OF_RANDOM_PHOTOS = 10;
 
 const imgFilters = document.querySelector('.img-filters');
-const filterDefault = document.querySelector('#filter-default');
-const filterRandom = document.querySelector('#filter-random');
-const filterDiscussed = document.querySelector('#filter-discussed');
 const buttons = document.querySelectorAll('.img-filters__button');
+const buttonsContainer = document.querySelector('.img-filters__form');
 
 const showFilter = () => imgFilters.classList.remove('img-filters--inactive');
 
@@ -24,20 +23,27 @@ const generateNewRandomPhotoData = (array) => {
   return newRandomPhotoData;
 };
 
-const compareLikes = (a, b) => b.likes - a.likes;
-
-const generateDiscussedPhotoData = (sourceArray) => sourceArray.slice().sort(compareLikes);
-
-const clearButtons = () => {
-  buttons.forEach((button) => button.classList.remove('img-filters__button--active'));
-};
+const generateDiscussedPhotoData = (sourceArray) => sourceArray.slice().sort((a, b) => b.comments.length - a.comments.length);
 
 const clearPictures = () => {
   const pictures = document.querySelectorAll('.picture');
   pictures.forEach((element) => element.remove());
 };
 
-const defaultCallBack = (a) => a;
+const renderNewPhotos = (sourceData, cb = (el) => el) => {
+  clearPictures();
+  renderPhotos(cb(sourceData));
+};
+
+const Callbacks = {
+  'filter-default': (photos) => renderNewPhotos(photos),
+  'filter-random': (photos) => renderNewPhotos(photos, generateNewRandomPhotoData),
+  'filter-discussed': (photos) => renderNewPhotos(photos, generateDiscussedPhotoData)
+};
+
+const clearButtons = () => {
+  buttons.forEach((button) => button.classList.remove('img-filters__button--active'));
+};
 
 const changeButtons = (evt) => {
   clearButtons();
@@ -45,24 +51,19 @@ const changeButtons = (evt) => {
   element.classList.add('img-filters__button--active');
 };
 
-const renderNewPhotos = (sourceData, cb = defaultCallBack) => {
-  clearPictures();
-  renderPhotos(cb(sourceData));
+const setButtonsContainerListeners = (data) => {
+  buttonsContainer.addEventListener('click', (evt) => {
+    const targetButton = evt.target.closest('.img-filters__button').id;
+    const cb = Callbacks[targetButton];
+    const cbDebounced = debounce(() => cb(data));
+    cbDebounced(data);
+  });
 };
 
-const defaultCb = (photos) => renderNewPhotos(photos);
-const randomCb = (photos) => renderNewPhotos(photos, generateNewRandomPhotoData);
-const discussedCb = (photos) => renderNewPhotos(photos, generateDiscussedPhotoData);
-
-const initFilterButtons = () => {
+const initFilter = (data) => {
   showFilter();
   buttons.forEach((button) => button.addEventListener('click', (evt) => changeButtons(evt)));
+  setButtonsContainerListeners(data);
 };
 
-const initFiltersListeners = (cb1, cb2, cb3) => {
-  filterDefault.addEventListener('click', () => cb1());
-  filterRandom.addEventListener('click', () => cb2());
-  filterDiscussed.addEventListener('click', () => cb3());
-};
-
-export {initFilterButtons, defaultCb, randomCb, discussedCb, initFiltersListeners};
+export {initFilter};
