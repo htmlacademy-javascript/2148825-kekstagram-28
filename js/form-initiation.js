@@ -1,7 +1,7 @@
 import {isEscapeKey} from './util.js';
 import {validateForm} from './form-validation.js';
 import {activateScaleSlider, resetScaleSlider} from './scale-slider.js';
-import {initFilterSelection, resetFilterSlider} from './filter-selection.js';
+import {initFilterSelection, destroyFilterSlider, resetFilterSlider} from './filter-selection.js';
 import {showSuccess, showError} from './popups.js';
 
 const uploadFormWindow = document.querySelector('.img-upload__overlay');
@@ -45,6 +45,7 @@ function closeUploadFormWindow () {
   uploadFileButton.value = '';
   resetScaleSlider();
   resetFilterSlider();
+  destroyFilterSlider();
 }
 
 const onSendSuccess = () => {

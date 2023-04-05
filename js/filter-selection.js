@@ -68,6 +68,10 @@ const resetFilterSlider = () => {
   preview.style.filter = '';
 };
 
+const destroyFilterSlider = () => {
+  sliderElement.noUiSlider.destroy();
+};
+
 const onRadioButtonChange = (evt) => {
   const element = evt.target;
   resetFilterSlider();
@@ -104,4 +108,4 @@ const initFilterSelection = () => {
   }
 };
 
-export {initFilterSelection, resetFilterSlider};
+export {initFilterSelection, destroyFilterSlider, resetFilterSlider};
