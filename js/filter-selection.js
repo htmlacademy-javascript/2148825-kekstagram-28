@@ -7,7 +7,7 @@ const sliderElement = document.querySelector('.effect-level__slider');
 const sliderValue = document.querySelector('.effect-level__value');
 const sliderContainer = document.querySelector('.effect-level');
 
-const filterOptions = {
+const FilterOptions = {
   chrome: {
     range: {
       min: 0,
@@ -54,7 +54,7 @@ const filterOptions = {
   }
 };
 
-const filterStyles = {
+const FilterStyles = {
   chrome: (filterValue) => `grayscale(${filterValue})`,
   sepia: (filterValue) => `sepia(${filterValue})`,
   marvin: (filterValue) => `invert(${filterValue}%)`,
@@ -80,10 +80,10 @@ const onRadioButtonChange = (evt) => {
 
   sliderContainer.classList.remove('hidden');
   preview.classList.add(`effects__preview--${element.value}`);
-  sliderElement.noUiSlider.updateOptions(filterOptions[element.value]);
+  sliderElement.noUiSlider.updateOptions(FilterOptions[element.value]);
   sliderElement.noUiSlider.on('update', () => {
     sliderValue.value = sliderElement.noUiSlider.get();
-    preview.style.filter = filterStyles[element.value](sliderValue.value);
+    preview.style.filter = FilterStyles[element.value](sliderValue.value);
   });
 };
 
