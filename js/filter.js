@@ -9,12 +9,6 @@ const imgFilters = document.querySelector('.img-filters');
 const buttons = document.querySelectorAll('.img-filters__button');
 const buttonsContainer = document.querySelector('.img-filters__form');
 
-const Filter = {
-  'filter-default': (photos) => photos,
-  'filter-random': (photos) => generateNewRandomPhotoData(photos),
-  'filter-discussed': (photos) => generateDiscussedPhotoData(photos),
-};
-
 const generateNewRandomPhotoData = (sourceArray) => {
   const getRandomId = getRandomUniqueNumber(0, NUMBER_OF_PHOTOS - 1);
   const newRandomPhotoData = [];
@@ -29,6 +23,11 @@ const generateNewRandomPhotoData = (sourceArray) => {
 
 const generateDiscussedPhotoData = (sourceArray) => sourceArray.slice().sort((a, b) => b.comments.length - a.comments.length);
 
+const Filter = {
+  'filter-default': (photos) => photos,
+  'filter-random': (photos) => generateNewRandomPhotoData(photos),
+  'filter-discussed': (photos) => generateDiscussedPhotoData(photos),
+};
 
 const showFilter = () => imgFilters.classList.remove('img-filters--inactive');
 
