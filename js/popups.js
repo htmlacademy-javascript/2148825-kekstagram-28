@@ -22,7 +22,7 @@ const selectors = {
 const showPopup = (template, buttonSelector, innerSelector) => {
   const node = template.cloneNode(true);
   const button = node.querySelector(buttonSelector);
-  const inner = node.querySelector(innerSelector);
+  const innerBlock = node.querySelector(innerSelector);
 
   const onDocumentKeydownEsc = (evt) => {
     if (isEscapeKey(evt)) {
@@ -40,7 +40,7 @@ const showPopup = (template, buttonSelector, innerSelector) => {
   document.addEventListener('keydown', onDocumentKeydownEsc);
   button.addEventListener('click', () => closePopup());
   node.addEventListener('click', () => closePopup());
-  inner.addEventListener('click', (evt) => evt.stopPropagation());
+  innerBlock.addEventListener('click', (evt) => evt.stopPropagation());
 };
 
 const showSuccess = () => showPopup(successTemplate, selectors.success.button, selectors.success.inner);

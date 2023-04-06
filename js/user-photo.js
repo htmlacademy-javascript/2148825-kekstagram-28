@@ -13,6 +13,6 @@ const setUploadFileListener = () => {
       preview.src = URL.createObjectURL(file);
     }
   });
-}
+};
 
 export {setUploadFileListener};

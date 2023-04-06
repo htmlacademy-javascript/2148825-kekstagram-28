@@ -57,12 +57,12 @@ const onUploadFileButtonChange = () => {
   openUploadFormWindow();
   activateScaleSlider();
   initFilterSelection();
-  validateForm(onSendSuccess, showError);
 };
 
 const initForm = () => {
   uploadFileButton.addEventListener('change', onUploadFileButtonChange);
   closeUploadFormButton.addEventListener('click', () => closeUploadFormWindow());
+  validateForm(onSendSuccess, showError);
 };
 
 export {initForm};

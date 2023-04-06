@@ -17,7 +17,7 @@ const submitButtonText = {
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'div'
+  errorTextTag: 'div',
 });
 
 const noDuplicates = (arr) => new Set(arr).size === arr.length;
