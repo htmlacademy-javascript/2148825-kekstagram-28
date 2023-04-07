@@ -5,7 +5,7 @@ import {debounce} from './util.js';
 const NUMBER_OF_PHOTOS = 25;
 const NUMBER_OF_RANDOM_PHOTOS = 10;
 
-const Filter = {
+const sortingPhotos = {
   'filter-default': (photos) => photos,
   'filter-random': (photos) => generateNewRandomPhotoData(photos),
   'filter-discussed': (photos) => generateDiscussedPhotoData(photos),
@@ -28,7 +28,7 @@ function generateNewRandomPhotoData (sourceArray) {
 }
 
 function generateDiscussedPhotoData (sourceArray) {
-  sourceArray.slice().sort((a, b) => b.comments.length - a.comments.length);
+  return sourceArray.slice().sort((a, b) => b.comments.length - a.comments.length);
 }
 
 const showFilter = () => imgFilters.classList.remove('img-filters--inactive');
@@ -49,7 +49,7 @@ const setFilterListener = (data) => {
     if (targetButton) {
       clearButtons();
       targetButton.classList.add('img-filters__button--active');
-      const filterFn = Filter[targetButton.id];
+      const filterFn = sortingPhotos[targetButton.id];
       const filterPhotos = filterFn(data);
       clearPictures();
       renderPhotos(filterPhotos);

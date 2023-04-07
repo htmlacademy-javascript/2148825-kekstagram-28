@@ -4,11 +4,14 @@ import {activateScaleSlider, resetScaleSlider} from './scale-slider.js';
 import {initFilterSelection, destroyFilterSlider, resetFilterSlider} from './filter-selection.js';
 import {showSuccess, showError} from './popups.js';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const uploadFormWindow = document.querySelector('.img-upload__overlay');
-const uploadFileButton = document.querySelector('#upload-file');
+const uploadFileInput = document.querySelector('#upload-file');
 const closeUploadFormButton = document.querySelector('#upload-cancel');
 const textHashtags = uploadFormWindow.querySelector('.text__hashtags');
 const textDescription = uploadFormWindow.querySelector('.text__description');
+const preview = document.querySelector('.img-upload__preview img');
 
 const onDocumentKeydownEsc = (evt) => {
   if (isEscapeKey(evt)) {
@@ -42,7 +45,7 @@ function closeUploadFormWindow () {
   textDescription.removeEventListener('keydown', onFieldKeydownEsc);
   textHashtags.value = '';
   textDescription.value = '';
-  uploadFileButton.value = '';
+  uploadFileInput.value = '';
   resetScaleSlider();
   resetFilterSlider();
   destroyFilterSlider();
@@ -53,14 +56,21 @@ const onSendSuccess = () => {
   closeUploadFormWindow();
 };
 
-const onUploadFileButtonChange = () => {
+const onUploadFileInputChange = () => {
   openUploadFormWindow();
   activateScaleSlider();
   initFilterSelection();
+  const file = uploadFileInput.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((ending) => fileName.endsWith(ending));
+
+  if (matches) {
+    preview.src = URL.createObjectURL(file);
+  }
 };
 
 const initForm = () => {
-  uploadFileButton.addEventListener('change', onUploadFileButtonChange);
+  uploadFileInput.addEventListener('change', onUploadFileInputChange);
   closeUploadFormButton.addEventListener('click', () => closeUploadFormWindow());
   validateForm(onSendSuccess, showError);
 };

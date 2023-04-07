@@ -1,13 +1,7 @@
 const MIN_VALUE = 0;
 const MAX_VALUE = 100;
 
-const radioButtons = document.querySelectorAll('.effects__radio');
-const preview = document.querySelector('.img-upload__preview img');
-const sliderElement = document.querySelector('.effect-level__slider');
-const sliderValue = document.querySelector('.effect-level__value');
-const sliderContainer = document.querySelector('.effect-level');
-
-const FilterOptions = {
+const filterOptions = {
   chrome: {
     range: {
       min: 0,
@@ -54,7 +48,7 @@ const FilterOptions = {
   }
 };
 
-const FilterStyles = {
+const filterStyles = {
   chrome: (filterValue) => `grayscale(${filterValue})`,
   sepia: (filterValue) => `sepia(${filterValue})`,
   marvin: (filterValue) => `invert(${filterValue}%)`,
@@ -62,14 +56,25 @@ const FilterStyles = {
   heat: (filterValue) => `brightness(${filterValue})`
 };
 
+const radioButtons = document.querySelectorAll('.effects__radio');
+const preview = document.querySelector('.img-upload__preview img');
+const slider = document.querySelector('.effect-level__slider');
+const sliderValue = document.querySelector('.effect-level__value');
+const sliderContainer = document.querySelector('.effect-level');
+
+let currentClass;
+
 const resetFilterSlider = () => {
-  sliderElement.noUiSlider.off();
-  preview.removeAttribute('class');
+  slider.noUiSlider.off();
   preview.style.filter = '';
+
+  if(currentClass) {
+    preview.classList.remove(currentClass);
+  }
 };
 
 const destroyFilterSlider = () => {
-  sliderElement.noUiSlider.destroy();
+  slider.noUiSlider.destroy();
 };
 
 const onRadioButtonChange = (evt) => {
@@ -83,18 +88,19 @@ const onRadioButtonChange = (evt) => {
   }
 
   sliderContainer.classList.remove('hidden');
-  preview.classList.add(`effects__preview--${element.value}`);
-  sliderElement.noUiSlider.updateOptions(FilterOptions[element.value]);
-  sliderElement.noUiSlider.on('update', () => {
-    sliderValue.value = sliderElement.noUiSlider.get();
-    preview.style.filter = FilterStyles[element.value](sliderValue.value);
+  currentClass = `effects__preview--${element.value}`;
+  preview.classList.add(currentClass);
+  slider.noUiSlider.updateOptions(filterOptions[element.value]);
+  slider.noUiSlider.on('update', () => {
+    sliderValue.value = slider.noUiSlider.get();
+    preview.style.filter = filterStyles[element.value](sliderValue.value);
   });
 };
 
 const initFilterSelection = () => {
   sliderContainer.classList.add('hidden');
 
-  noUiSlider.create(sliderElement, {
+  noUiSlider.create(slider, {
     range: {
       min: MIN_VALUE,
       max: MAX_VALUE,
