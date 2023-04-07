@@ -3,10 +3,10 @@ import {renderBigPicture, addComments} from './render-photo.js';
 
 const UNIT_COMMENTS_NUMBER = 5;
 
-const modalElement = document.querySelector('.big-picture');
-const closeModalButton = modalElement.querySelector('#picture-cancel');
+const modal = document.querySelector('.big-picture');
+const closeModalButton = modal.querySelector('#picture-cancel');
 const openModalContainer = document.querySelector('.pictures');
-const commentLoader = modalElement.querySelector('.comments-loader');
+const commentLoader = modal.querySelector('.comments-loader');
 
 let commentsCounter = UNIT_COMMENTS_NUMBER;
 let onCommentLoaderClick;
@@ -19,19 +19,19 @@ const onDocumentKeydownEsc = (evt) => {
 };
 
 function openModalWindow() {
-  modalElement.classList.remove('hidden');
+  modal.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydownEsc);
 }
 
 function closeModalWindow() {
-  modalElement.classList.add('hidden');
+  modal.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydownEsc);
   commentLoader.removeEventListener('click', onCommentLoaderClick);
 }
 
-const onOpenModalButtonClick = (evt, photos) => {
+const onOpenModalContainerClick = (evt, photos) => {
   const element = evt.target.closest('.picture');
 
   if (element && element.dataset.id) {
@@ -52,13 +52,13 @@ const onOpenModalButtonClick = (evt, photos) => {
 
 const onOpenModalContainerEnter = (evt, photos) => {
   if (isEnterKey(evt)) {
-    onOpenModalButtonClick(evt, photos);
+    onOpenModalContainerClick(evt, photos);
   }
 };
 
 const initGallery = (photos) => {
   closeModalButton.addEventListener('click', () => closeModalWindow());
-  openModalContainer.addEventListener('click', (evt) => onOpenModalButtonClick(evt, photos));
+  openModalContainer.addEventListener('click', (evt) => onOpenModalContainerClick(evt, photos));
   openModalContainer.addEventListener('keydown', (evt) => onOpenModalContainerEnter(evt, photos));
 };
 

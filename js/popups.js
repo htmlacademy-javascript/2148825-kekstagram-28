@@ -1,5 +1,16 @@
 import {isEscapeKey} from './util.js';
 
+const Selectors = {
+  SUCCESS: {
+    BUTTON: '.success__button',
+    INNER:  '.success__inner',
+  },
+  ERROR: {
+    BUTTON: '.error__button',
+    INNER:  '.error__inner',
+  },
+};
+
 const successTemplate = document.querySelector('#success')
   .content
   .querySelector('.success');
@@ -8,21 +19,10 @@ const errorTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
 
-const selectors = {
-  success: {
-    button: '.success__button',
-    inner:  '.success__inner',
-  },
-  error: {
-    button: '.error__button',
-    inner:  '.error__inner',
-  },
-};
-
 const showPopup = (template, buttonSelector, innerSelector) => {
-  const node = template.cloneNode(true);
-  const button = node.querySelector(buttonSelector);
-  const inner = node.querySelector(innerSelector);
+  const popup = template.cloneNode(true);
+  const button = popup.querySelector(buttonSelector);
+  const innerBlock = popup.querySelector(innerSelector);
 
   const onDocumentKeydownEsc = (evt) => {
     if (isEscapeKey(evt)) {
@@ -32,18 +32,18 @@ const showPopup = (template, buttonSelector, innerSelector) => {
   };
 
   function closePopup() {
-    node.remove();
+    popup.remove();
     document.removeEventListener('keydown', onDocumentKeydownEsc);
   }
 
-  document.body.append(node);
+  document.body.append(popup);
   document.addEventListener('keydown', onDocumentKeydownEsc);
   button.addEventListener('click', () => closePopup());
-  node.addEventListener('click', () => closePopup());
-  inner.addEventListener('click', (evt) => evt.stopPropagation());
+  popup.addEventListener('click', () => closePopup());
+  innerBlock.addEventListener('click', (evt) => evt.stopPropagation());
 };
 
-const showSuccess = () => showPopup(successTemplate, selectors.success.button, selectors.success.inner);
-const showError = () => showPopup(errorTemplate, selectors.error.button, selectors.error.inner);
+const showSuccess = () => showPopup(successTemplate, Selectors.SUCCESS.BUTTON, Selectors.SUCCESS.INNER);
+const showError = () => showPopup(errorTemplate, Selectors.ERROR.BUTTON, Selectors.ERROR.INNER);
 
 export {showSuccess, showError};
