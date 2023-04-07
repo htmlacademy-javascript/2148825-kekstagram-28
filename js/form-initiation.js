@@ -57,15 +57,15 @@ const onSendSuccess = () => {
 };
 
 const onUploadFileInputChange = () => {
-  openUploadFormWindow();
-  activateScaleSlider();
-  initFilterSelection();
   const file = uploadFileInput.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((ending) => fileName.endsWith(ending));
 
   if (matches) {
     preview.src = URL.createObjectURL(file);
+    openUploadFormWindow();
+    activateScaleSlider();
+    initFilterSelection();
   }
 };
 
