@@ -19,22 +19,24 @@ const errorTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
 
+let popup;
+
+const onDocumentKeydownEsc = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closePopup();
+  }
+};
+
+function closePopup() {
+  popup.remove();
+  document.removeEventListener('keydown', onDocumentKeydownEsc);
+}
+
 const showPopup = (template, buttonSelector, innerSelector) => {
-  const popup = template.cloneNode(true);
+  popup = template.cloneNode(true);
   const button = popup.querySelector(buttonSelector);
   const innerBlock = popup.querySelector(innerSelector);
-
-  const onDocumentKeydownEsc = (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      closePopup();
-    }
-  };
-
-  function closePopup() {
-    popup.remove();
-    document.removeEventListener('keydown', onDocumentKeydownEsc);
-  }
 
   document.body.append(popup);
   document.addEventListener('keydown', onDocumentKeydownEsc);
