@@ -5,17 +5,11 @@ import {debounce} from './util.js';
 const NUMBER_OF_PHOTOS = 25;
 const NUMBER_OF_RANDOM_PHOTOS = 10;
 
-const sortingPhotos = {
-  'filter-default': (photos) => photos,
-  'filter-random': (photos) => generateNewRandomPhotoData(photos),
-  'filter-discussed': (photos) => generateDiscussedPhotoData(photos),
-};
-
 const imgFilters = document.querySelector('.img-filters');
 const buttons = document.querySelectorAll('.img-filters__button');
 const buttonsContainer = document.querySelector('.img-filters__form');
 
-function generateNewRandomPhotoData (sourceArray) {
+const generateNewRandomPhotoData = (sourceArray) => {
   const getRandomId = getRandomUniqueNumber(0, NUMBER_OF_PHOTOS - 1);
   const newRandomPhotoData = [];
 
@@ -25,11 +19,15 @@ function generateNewRandomPhotoData (sourceArray) {
   }
 
   return newRandomPhotoData;
-}
+};
 
-function generateDiscussedPhotoData (sourceArray) {
-  return sourceArray.slice().sort((a, b) => b.comments.length - a.comments.length);
-}
+const generateDiscussedPhotoData = (sourceArray) => sourceArray.slice().sort((a, b) => b.comments.length - a.comments.length);
+
+const sortingPhotos = {
+  'filter-default': (photos) => photos,
+  'filter-random': (photos) => generateNewRandomPhotoData(photos),
+  'filter-discussed': (photos) => generateDiscussedPhotoData(photos),
+};
 
 const showFilter = () => imgFilters.classList.remove('img-filters--inactive');
 
